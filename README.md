@@ -24,4 +24,18 @@ python manage.py migrate
 
 python manage.py runserver 0.0.0.0:8000
 ```
-Remember to configure custom inbound TCP rule on port 8000. 
+Remember to configure custom inbound TCP rule on port 8000 if running on EC2. 
+
+## How to run on port 80 on Ubuntu 16.04 LTS
+Run the setup above
+Configure HTTP custom inbound rule if running on EC2.
+Start in the root directory
+```
+sudo pip install -r requirements.txt
+
+sudo python manage.py runserver 0.0.0.0:80
+```
+If port is already taken, run the following command to kill the processes occupying the port
+```
+sudo fuser -k 80/tcp
+```
