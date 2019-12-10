@@ -1,3 +1,5 @@
+import boto3
+from botocore.exceptions import ClientError
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -6,6 +8,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 from .models import Following, Post, FollowingForm, PostForm, MyUserCreationForm
+import logging
 
 
 # Anonymous views
@@ -116,6 +119,11 @@ from django.core.files.storage import FileSystemStorage
 def upload(request):
   if request.method == 'POST' and request.FILES['myfile']:
     my_file = request.FILES['myfile']
+    s3_client = boto3.client('s3')
+    try:
+      response = s3_client.upload_fileobj(my_file, 'scalica-photos', my_file.name)
+    except ClientError as e:
+      logging.error(e)
     fs = FileSystemStorage()
     fs.save(my_file.name, my_file)
   return home(request)
