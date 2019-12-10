@@ -19,7 +19,7 @@ def index(request):
 def anon_home(request):
   return render(request, 'micro/public.html')
 
-def stream(request, user_id):  
+def stream(request, user_id):
   # See if to present a 'follow' button
   form = None
   if request.user.is_authenticated() and request.user.id != int(user_id):
@@ -36,7 +36,7 @@ def stream(request, user_id):
     posts = paginator.page(page)
   except PageNotAnInteger:
     # If page is not an integer, deliver first page.
-    posts = paginator.page(1) 
+    posts = paginator.page(1)
   except EmptyPage:
     # If page is out of range (e.g. 9999), deliver last page of results.
     posts = paginator.page(paginator.num_pages)
@@ -109,3 +109,13 @@ def follow(request):
   else:
     form = FollowingForm
   return render(request, 'micro/follow.html', {'form' : form})
+
+from django.core.files.storage import FileSystemStorage
+
+@login_required
+def upload(request):
+  if request.method == 'POST' and request.FILES['myfile']:
+    my_file = request.FILES['myfile']
+    fs = FileSystemStorage()
+    fs.save(my_file.name, my_file)
+  return home(request)

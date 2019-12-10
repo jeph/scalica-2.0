@@ -17,6 +17,11 @@
     {{ post_form.text }}
     <input type="submit" value="Post" />
   </form>
+  <form action="/micro/upload/" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="myfile">
+    <button type="submit">Upload</button>
+  </form>
 </div>
 <p>
 <div>
