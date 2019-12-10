@@ -5,3 +5,4 @@ class PhotoStorage(S3Boto3Storage):
     location = '/'
     default_acl = 'public-read'
     file_overwrite = True
+    
