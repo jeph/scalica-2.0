@@ -130,7 +130,7 @@ def upload(request):
                  + os.path.splitext(photo.name)[1]
     try:
       response = s3_client.upload_fileobj(
-        photo.seek(0),
+        photo,
         'scalica-photos',
         photo_name
       )
