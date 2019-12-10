@@ -28,10 +28,19 @@ Remember to configure custom inbound TCP rule on port 8000 if running on EC2.
 
 ## How to run on port 80 on Ubuntu 16.04 LTS
 Run the setup above
+
 Configure HTTP custom inbound rule if running on EC2.
-Start in the root directory
+
+Install pip if you don't have it already
+```
+sudo apt install python-pip
+```
+
+Start in the root directory.
 ```
 sudo pip install -r requirements.txt
+
+cd web/scalica
 
 sudo python manage.py runserver 0.0.0.0:80
 ```
