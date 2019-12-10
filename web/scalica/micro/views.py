@@ -126,12 +126,12 @@ def upload(request):
       aws_access_key_id='',
       aws_secret_access_key=''
     )
+    print(s3_client)
     try:
       response = s3_client.upload_fileobj(
         photo,
         'scalica-photos',
-        photo.name,
-        ExtraArgs={'ACL': 'public-read'}
+        photo.name
       )
     except ClientError as e:
       logging.error(e)
