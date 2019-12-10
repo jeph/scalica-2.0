@@ -125,7 +125,7 @@ def upload(request):
       aws_secret_access_key=''
     )
     try:
-      response = s3_client.upload_fileobj(my_file, 'scalica-photos', my_file.name)
+      response = s3_client.upload_fileobj(my_file.read(), 'scalica-photos', my_file.name)
     except ClientError as e:
       logging.error(e)
     fs = FileSystemStorage()
