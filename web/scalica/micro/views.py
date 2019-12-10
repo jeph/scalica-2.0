@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
-from .models import Following, Post, FollowingForm, PostForm, MyUserCreationForm
+from .models import Following, Post, FollowingForm, PostForm, PhotoForm, MyUserCreationForm
 
 
 # Anonymous views
@@ -79,7 +79,8 @@ def home(request):
   context = {
     'post_list': post_list,
     'my_post' : my_post,
-    'post_form' : PostForm
+    'post_form' : PostForm,
+    'photo_form' : PhotoForm,
   }
   return render(request, 'micro/home.html', context)
 
@@ -96,6 +97,17 @@ def post(request):
   else:
     form = PostForm
   return render(request, 'micro/post.html', {'form' : form})
+
+@login_required
+def postimage(request):
+   if request.method == 'POST':
+      form = PhotoForm(request.POST, request.FILES)
+      if form.is_valid():
+         form.save()
+         return home(request)
+   else:
+      form = PhotoForm()
+   return render(request, 'micro/postimage.html', {'form' : form})
 
 @login_required
 def follow(request):
