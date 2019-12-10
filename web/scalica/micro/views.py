@@ -125,7 +125,7 @@ def upload(request):
     print(s3_client)
     try:
       response = s3_client.upload_fileobj(
-        photo.read(),
+        photo.open(mode="rb"),
         'scalica-photos',
         photo.name
       )
