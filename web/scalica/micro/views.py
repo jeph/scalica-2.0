@@ -119,7 +119,11 @@ from django.core.files.storage import FileSystemStorage
 def upload(request):
   if request.method == 'POST' and request.FILES['myfile']:
     my_file = request.FILES['myfile']
-    s3_client = boto3.client('s3')
+    s3_client = boto3.client(
+      's3',
+      aws_access_key_id='',
+      aws_secret_access_key=''
+    )
     try:
       response = s3_client.upload_fileobj(my_file, 'scalica-photos', my_file.name)
     except ClientError as e:
