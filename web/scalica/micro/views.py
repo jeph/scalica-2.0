@@ -116,8 +116,6 @@ def follow(request):
     form = FollowingForm
   return render(request, 'micro/follow.html', {'form' : form})
 
-from django.core.files.storage import FileSystemStorage
-
 @login_required
 def upload(request):
   if request.method == 'POST' and request.FILES['photo']:
