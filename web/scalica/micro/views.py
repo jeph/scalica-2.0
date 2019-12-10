@@ -117,17 +117,17 @@ from django.core.files.storage import FileSystemStorage
 
 @login_required
 def upload(request):
-  if request.method == 'POST' and request.FILES['myfile']:
-    my_file = request.FILES['myfile']
+  if request.method == 'POST' and request.FILES['photo']:
+    photo = request.FILES['photo']
+    fs = FileSystemStorage()
+    fs.save(photo.name, photo)
     s3_client = boto3.client(
       's3',
       aws_access_key_id='',
       aws_secret_access_key=''
     )
     try:
-      response = s3_client.upload_fileobj(my_file.read(), 'scalica-photos', my_file.name)
+      response = s3_client.upload_file(photo, 'scalica-photos', photo.name)
     except ClientError as e:
       logging.error(e)
-    fs = FileSystemStorage()
-    fs.save(my_file.name, my_file)
   return home(request)
