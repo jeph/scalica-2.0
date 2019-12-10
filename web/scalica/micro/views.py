@@ -122,10 +122,10 @@ def upload(request):
     s3_client = boto3.client(
       's3'
     )
-    print(s3_client)
+    print(photo)
     try:
       response = s3_client.upload_fileobj(
-        photo.open(mode="rb"),
+        photo,
         'scalica-photos',
         photo.name
       )
