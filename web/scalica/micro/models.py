@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import models
 from django.forms import ModelForm, TextInput
+from storage_backends import PhotoStorage
 
 class Post(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
@@ -24,6 +25,9 @@ class Following(models.Model):
   def __str__(self):
     return self.follower.username + "->" + self.followee.username
 
+class PhotoUpload(models.Model):
+  file = models.FileField(storage=PhotoStorage())
+
 # Model Forms
 class PostForm(ModelForm):
   class Meta:
@@ -41,5 +45,5 @@ class FollowingForm(ModelForm):
 class MyUserCreationForm(UserCreationForm):
   class Meta(UserCreationForm.Meta):
     help_texts = {
-      'username' : '',
+      'username': '',
     }

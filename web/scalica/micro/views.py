@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
-from .models import Following, Post, FollowingForm, PostForm, MyUserCreationForm
+from .models import Following, Post, FollowingForm, PostForm, MyUserCreationForm, PhotoUpload
 
 
 # Anonymous views
@@ -19,7 +19,7 @@ def index(request):
 def anon_home(request):
   return render(request, 'micro/public.html')
 
-def stream(request, user_id):  
+def stream(request, user_id):
   # See if to present a 'follow' button
   form = None
   if request.user.is_authenticated() and request.user.id != int(user_id):
@@ -36,7 +36,7 @@ def stream(request, user_id):
     posts = paginator.page(page)
   except PageNotAnInteger:
     # If page is not an integer, deliver first page.
-    posts = paginator.page(1) 
+    posts = paginator.page(1)
   except EmptyPage:
     # If page is out of range (e.g. 9999), deliver last page of results.
     posts = paginator.page(paginator.num_pages)
@@ -61,7 +61,7 @@ def register(request):
     return home(request)
   else:
     form = MyUserCreationForm
-  return render(request, 'micro/register.html', {'form' : form})
+  return render(request, 'micro/register.html', {'form': form})
 
 # Authenticated views
 #####################
@@ -95,7 +95,18 @@ def post(request):
     return home(request)
   else:
     form = PostForm
-  return render(request, 'micro/post.html', {'form' : form})
+  return render(request, 'micro/post.html', {'form': form})
+
+@login_required
+def photo_upload(request):
+  if request.method == 'POST':
+    image_file = request.FILES['image_file']
+    image_type = request.POST['image_type']
+    upload = PhotoUpload(file=image_file)
+    upload.save()
+    image_url = upload.file.url
+    return home(request)
+  return home(request)
 
 @login_required
 def follow(request):
@@ -108,4 +119,4 @@ def follow(request):
     return home(request)
   else:
     form = FollowingForm
-  return render(request, 'micro/follow.html', {'form' : form})
+  return render(request, 'micro/follow.html', {'form': form})
