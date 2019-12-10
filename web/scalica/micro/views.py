@@ -9,6 +9,9 @@ from django.shortcuts import render
 from django.utils import timezone
 from .models import Following, Post, FollowingForm, PostForm, MyUserCreationForm
 import logging
+import uuid
+import os.path
+import time
 
 
 # Anonymous views
@@ -122,11 +125,14 @@ def upload(request):
     s3_client = boto3.client(
       's3'
     )
+    photo_name = str(int(round(time.time() * 1000))) \
+                 + "-" + str(uuid.uuid4()) \
+                 + os.path.splitext(photo.name)[1]
     try:
       response = s3_client.upload_fileobj(
         photo.seek(0),
         'scalica-photos',
-        photo.name
+        photo_name
       )
     except ClientError as e:
       logging.error(e)
