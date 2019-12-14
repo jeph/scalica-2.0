@@ -82,10 +82,10 @@ def home(request):
     follower_id=request.user.id)]
   post_list = Post.objects.filter(
       user_id__in=follows).order_by('-pub_date')[0:10]
- # photo_list = Photo.object.filter(
-  #    user_id__in=follows)[0:10]
+  photo_list = Photo.objects.filter(
+      user_id__in=follows)[0:10]
   context = {
-  #  'photo_list' : photo_list,
+    'photo_list': photo_list,
     'post_list': post_list,
     'my_post' : my_post,
     'post_form' : PostForm,
