@@ -84,6 +84,7 @@ def home(request):
       user_id__in=follows).order_by('-pub_date')[0:10]
   photo_list = Photo.objects.filter(
       user_id__in=follows)[0:10]
+  print(photo_list)
   context = {
     'photo_list': photo_list,
     'post_list': post_list,
