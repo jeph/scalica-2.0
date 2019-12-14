@@ -48,3 +48,30 @@ If port is already taken, run the following command to kill the processes occupy
 ```
 sudo fuser -k 80/tcp
 ```
+
+## Exposing the database for non local use
+Configure a custom inbound TCP rule on port 3306 if running on EC2.
+
+Comment out the line that says `bind-address` in the following file:
+```
+sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+```
+
+Then run:
+```
+sudo systemctl restart mysql
+```
+
+Connect to the my SQL database locally. Enter your password when prompted.
+Then run the commands and exit. Replace `yourpassword` with your password.
+```
+mysql -u root -p
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY ‘yourpassword’;
+FLUSH PRIVILEGES;
+exit
+```
+
+Restart the database:
+```
+sudo systemctl restart mysql
+```
