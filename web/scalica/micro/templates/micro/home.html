@@ -26,8 +26,8 @@
 <p>
 <div>
   {% if post_list %}
-    {% for photo_url in photo_list %}
-  <img src="https://scalica-photos.s3.amazonaws.com/{{ photo_url }}" alt="Shared Photo"/>
+    {% for photo in photo_list %}
+  <img src="https://scalica-photos.s3.amazonaws.com/{{ photo.img_id }}" alt="Shared Photo"/>
     {% endfor %}
   {% endif %}
 {% if post_list %}
