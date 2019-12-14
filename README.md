@@ -66,7 +66,7 @@ Connect to the my SQL database locally. Enter your password when prompted.
 Then run the commands and exit. Replace `yourpassword` with your password.
 ```
 mysql -u root -p
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY ‘yourpassword’;
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'yourpassword';
 FLUSH PRIVILEGES;
 exit
 ```
