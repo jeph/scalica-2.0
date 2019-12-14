@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import models
 from django.forms import ModelForm, TextInput
+import uuid
 
 class Post(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL)
@@ -25,7 +26,9 @@ class Following(models.Model):
     return self.follower.username + "->" + self.followee.username
 
 class Photo(models.Model):
-  img_id = models.CharField(max_length=100)
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
+  img_id = models.CharField(max_length=100, null=True)
   num_faces = models.IntegerField(default=0)
 
 # Model Forms
@@ -42,7 +45,7 @@ class FollowingForm(ModelForm):
     model = Following
     fields = ('followee',)
 
-class PhotoForm(ModelForm)
+class PhotoForm(ModelForm):
   class Meta:
     model = Photo
     fields = ()

@@ -7,7 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
-from .models import Following, Post, FollowingForm, PostForm, PhotoForm, MyUserCreationForm
+from .models import Following, Post, Photo, FollowingForm, PostForm, PhotoForm, MyUserCreationForm
 import logging
 import uuid
 import os.path
@@ -82,7 +82,10 @@ def home(request):
     follower_id=request.user.id)]
   post_list = Post.objects.filter(
       user_id__in=follows).order_by('-pub_date')[0:10]
+ # photo_list = Photo.object.filter(
+  #    user_id__in=follows)[0:10]
   context = {
+  #  'photo_list' : photo_list,
     'post_list': post_list,
     'my_post' : my_post,
     'post_form' : PostForm,
@@ -130,6 +133,7 @@ def upload(request):
                  + os.path.splitext(photo.name)[1]
     new_photo = form.save(commit=False)
     new_photo.img_id = photo_name
+    new_photo.user = request.user
     new_photo.save()
     try:
       response = s3_client.upload_fileobj(
