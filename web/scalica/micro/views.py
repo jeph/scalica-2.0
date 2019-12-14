@@ -7,7 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
-from .models import Following, Post, FollowingForm, PostForm, MyUserCreationForm
+from .models import Following, Post, FollowingForm, PostForm, PhotoForm, MyUserCreationForm
 import logging
 import uuid
 import os.path
@@ -85,7 +85,8 @@ def home(request):
   context = {
     'post_list': post_list,
     'my_post' : my_post,
-    'post_form' : PostForm
+    'post_form' : PostForm,
+    'photo_form' : PhotoForm
   }
   return render(request, 'micro/home.html', context)
 
@@ -119,6 +120,7 @@ def follow(request):
 @login_required
 def upload(request):
   if request.method == 'POST' and request.FILES['photo']:
+    form = PhotoForm(request.POST)
     photo = request.FILES['photo']
     s3_client = boto3.client(
       's3'
@@ -126,6 +128,9 @@ def upload(request):
     photo_name = str(int(round(time.time() * 1000))) \
                  + "-" + str(uuid.uuid4()) \
                  + os.path.splitext(photo.name)[1]
+    new_photo = form.save(commit=False)
+    new_photo.img_id = photo_name
+    new_photo.save()
     try:
       response = s3_client.upload_fileobj(
         photo,
@@ -134,4 +139,7 @@ def upload(request):
       )
     except ClientError as e:
       logging.error(e)
-  return home(request)
+    return home(request)
+  else:
+    form = PhotoForm
+  return render(request, 'micro/upload.html', {'form': form})

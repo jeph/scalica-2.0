@@ -24,6 +24,10 @@ class Following(models.Model):
   def __str__(self):
     return self.follower.username + "->" + self.followee.username
 
+class Photo(models.Model):
+  img_id = models.CharField(max_length=100)
+  num_faces = models.IntegerField(default=0)
+
 # Model Forms
 class PostForm(ModelForm):
   class Meta:
@@ -37,6 +41,11 @@ class FollowingForm(ModelForm):
   class Meta:
     model = Following
     fields = ('followee',)
+
+class PhotoForm(ModelForm)
+  class Meta:
+    model = Photo
+    fields = ()
 
 class MyUserCreationForm(UserCreationForm):
   class Meta(UserCreationForm.Meta):

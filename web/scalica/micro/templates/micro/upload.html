@@ -1,0 +1,8 @@
+{% extends "micro/base.html" %}
+{% block content %}
+<form action="/micro/upload/" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input type="file" name="photo">
+  <button type="submit">Upload</button>
+</form>
+{% endblock %}
