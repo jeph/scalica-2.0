@@ -121,18 +121,12 @@ def tag(request, photo_id):
     new_tag = form.save(commit=False)
     new_tag.photo = photo
     new_tag.save()
-    tag_list = Tag.objects.filter(photo=photo)
-    context = {
-    'form' : form,
-    'photo' : photo,
-    'tag_list' : tag_list
-    }
-    return render(request, 'micro/tag.html', context)
   else:
     form = TagForm
-    tag_list = Tag.objects.filter(photo=photo)
-    if tag_list.len() >= photo.num_faces:
-      form = None
+    
+  tag_list = Tag.objects.filter(photo=photo)
+  if len(tag_list) >= photo.num_faces:
+    form = None
   context = {
     'form' : form,
     'photo' : photo,
