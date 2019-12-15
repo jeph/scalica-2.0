@@ -25,6 +25,11 @@ class Following(models.Model):
   def __str__(self):
     return self.follower.username + "->" + self.followee.username
 
+class Tag(models.Model):
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+  text = models.CharField(max_length=100)
+  photo = models.ForeignKey(Photo, on_delete=models.CASCADE)
+
 class Photo(models.Model):
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
