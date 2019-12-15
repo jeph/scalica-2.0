@@ -28,7 +28,7 @@
   {% if photo_list %}
     {% for photo in photo_list %}
   <a href = "./tag/{{ photo.id}}">
-  <img src="https://scalica-photos.s3.amazonaws.com/{{ photo.img_id }}" alt="Shared Photo"/>
+  <img src="https://scalica-photos.s3.amazonaws.com/{{ photo.img_id }}" alt="Shared Photo" style="width:200px;height:200px;"/>
   <a/>
     {% endfor %}
   {% endif %}
