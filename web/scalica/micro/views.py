@@ -7,7 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
-from .models import Following, Post, Photo, FollowingForm, PostForm, PhotoForm, MyUserCreationForm
+from .models import Following, Post, Photo, Tag, FollowingForm, PostForm, PhotoForm, TagForm, MyUserCreationForm
 import logging
 import uuid
 import os.path
@@ -94,6 +94,8 @@ def home(request):
   }
   return render(request, 'micro/home.html', context)
 
+
+
 # Allows to post something and shows my most recent posts.
 @login_required
 def post(request):
@@ -107,6 +109,24 @@ def post(request):
   else:
     form = PostForm
   return render(request, 'micro/post.html', {'form' : form})
+
+@login_required
+def tag(request, photo_id):
+  if request.method == 'POST':
+    form = TagForm(request.POST)
+    new_tag = form.save(commit=False)
+    photo = Photo.objects.filter(id=photo_id)
+    new_tag.photo = photo
+    form = new_tag.save()
+    return home(request)
+  else:
+    form = TagForm
+    photo = None
+  context = {
+    'photo' : photo,
+    'form' : form
+  }
+  return render(request, 'micro/tag.html', context)
 
 @login_required
 def follow(request):
