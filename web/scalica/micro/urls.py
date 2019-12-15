@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^upload/$', views.upload, name='register'),
     url(r'^tag/(?P<photo_id>[0-9A-Za-z\-]+)/$', views.tag, name='tag'),
     url(r'^upload/tag/(?P<photo_id>[0-9A-Za-z\-]+)/$', views.tag, name='tag'),
+    url(r'^follow/tag/(?P<photo_id>[0-9A-Za-z\-]+)/$', views.tag, name='tag'),
     url('^', include('django.contrib.auth.urls'))
 ]
