@@ -112,19 +112,31 @@ def post(request):
 
 @login_required
 def tag(request, photo_id):
+  photo = Photo.objects.filter(id=uuid.UUID(photo_id))[0]
+  if photo.num_faces == 0:
+    return render(request, 'micro/tag.html', {'photo': photo, 'tag_list': None, 'form': None})
+
   if request.method == 'POST':
     form = TagForm(request.POST)
     new_tag = form.save(commit=False)
-    photo = Photo.objects.filter(id=photo_id)
     new_tag.photo = photo
-    form = new_tag.save()
-    return home(request)
+    new_tag.save()
+    tag_list = Tag.objects.filter(photo=photo)
+    context = {
+    'form' : form,
+    'photo' : photo,
+    'tag_list' : tag_list
+    }
+    return render(request, 'micro/tag.html', context)
   else:
     form = TagForm
-    photo = None
+    tag_list = Tag.objects.filter(photo=photo)
+    if tag_list.len() >= photo.num_faces:
+      form = None
   context = {
+    'form' : form,
     'photo' : photo,
-    'form' : form
+    'tag_list' : tag_list,
   }
   return render(request, 'micro/tag.html', context)
 
